@@ -212,7 +212,7 @@ header p {
   display: grid;
   grid-template-columns: repeat(7, 195px);
   gap: 1rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .kingdom-grid {
@@ -314,6 +314,76 @@ header p {
   color: var(--accent);
   flex-shrink: 0;
 }
+
+.veto-start-btn {
+  background: #5a2a2a;
+  color: #e07070;
+  margin-top: -0.25rem;
+}
+.veto-start-btn:hover { background: #7a3a3a; }
+
+/* Veto card states */
+.card-tile.veto-active { cursor: default; }
+
+.card-tile.veto-selected {
+  border-color: var(--attack);
+  box-shadow: 0 0 8px rgba(139, 32, 32, 0.5);
+}
+
+.card-image-wrap { position: relative; }
+
+.veto-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background: rgba(0, 0, 0, 0.45);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.card-tile.veto-active:hover .veto-overlay,
+.card-tile.veto-selected .veto-overlay { opacity: 1; }
+
+.veto-btn {
+  background: rgba(139, 32, 32, 0.85);
+  color: #f0c0c0;
+  border: 1px solid #e07070;
+  border-radius: var(--radius);
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.veto-btn:hover { background: rgba(180, 40, 40, 0.95); }
+
+.veto-confirm-btn {
+  background: rgba(30, 100, 50, 0.9);
+  color: #80e0a0;
+  border: 1px solid #6ecf82;
+  border-radius: var(--radius);
+  padding: 0.35rem 0.6rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.veto-confirm-btn:hover { background: rgba(40, 130, 60, 0.95); }
+
+.veto-cancel-btn {
+  background: rgba(60, 40, 40, 0.9);
+  color: #e07070;
+  border: 1px solid #8b2020;
+  border-radius: var(--radius);
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.veto-cancel-btn:hover { background: rgba(90, 40, 40, 0.95); }
 
 .empty-state {
   color: var(--text-muted);

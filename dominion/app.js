@@ -3,6 +3,14 @@ let allSets = [];
 let kingdom = [];
 let sortOrder = 'cost'; // 'cost' | 'set'
 
+// Veto state
+let vetoMode = false;
+let vetoQueue = [];    // ordered list of player names for each veto turn
+let vetoIndex = 0;
+let pendingVetoCard = null; // card name currently selected for veto
+
+// ─── Init ────────────────────────────────────────────────────────────────────
+
 async function init() {
   const res = await fetch('data/cards.json');
   const data = await res.json();
@@ -16,6 +24,8 @@ async function init() {
   renderBasicSupply(2);
 }
 
+// ─── Controls ────────────────────────────────────────────────────────────────
+
 function renderSetCheckboxes() {
   const container = document.getElementById('set-checkboxes');
   container.innerHTML = '';
@@ -28,7 +38,6 @@ function renderSetCheckboxes() {
     `;
     container.appendChild(label);
   });
-
   container.addEventListener('change', onSettingsChange);
 }
 
@@ -36,55 +45,20 @@ function setupControls() {
   document.getElementById('players').addEventListener('change', onSettingsChange);
   document.getElementById('max-sets').addEventListener('change', onSettingsChange);
   document.getElementById('min-per-set').addEventListener('change', onSettingsChange);
+  document.getElementById('veto-count').addEventListener('input', validateVetoCount);
   document.getElementById('generate-btn').addEventListener('click', generateKingdom);
+  document.getElementById('veto-btn').addEventListener('click', startVeto);
   document.getElementById('sort-btn').addEventListener('click', toggleSort);
-}
 
-function sortKingdom() {
-  if (sortOrder === 'cost') {
-    kingdom.sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
-  } else {
-    kingdom.sort((a, b) => a.set.localeCompare(b.set) || a.name.localeCompare(b.name));
-  }
-}
-
-function toggleSort() {
-  sortOrder = sortOrder === 'cost' ? 'set' : 'cost';
-  const btn = document.getElementById('sort-btn');
-  btn.textContent = sortOrder === 'cost' ? 'Sort: By Cost' : 'Sort: By Set/Name';
-  sortKingdom();
-  const players = parseInt(document.getElementById('players').value) || 2;
-  renderKingdom(players);
-}
-
-function renderPlayerInputs(count) {
-  const container = document.getElementById('player-names');
-  // Preserve any names already typed
-  const existing = Array.from(container.querySelectorAll('input')).map(i => i.value);
-  container.innerHTML = '';
-  for (let i = 0; i < count; i++) {
-    const input = document.createElement('input');
-    input.type = 'text';
-    input.className = 'player-name-input';
-    input.placeholder = `Player ${i + 1}`;
-    input.value = existing[i] || '';
-    container.appendChild(input);
-  }
-}
-
-function getPlayerNames(count) {
-  const inputs = document.querySelectorAll('.player-name-input');
-  return Array.from(inputs).map((inp, i) => inp.value.trim() || `Player ${i + 1}`);
-}
-
-function pickFirstPlayer(players, count) {
-  return players[Math.floor(Math.random() * count)];
-}
-
-function showFirstPlayer(name) {
-  const banner = document.getElementById('first-player-banner');
-  banner.textContent = `${name} goes first!`;
-  banner.hidden = false;
+  // Event delegation for veto card interactions
+  document.getElementById('kingdom-grid').addEventListener('click', e => {
+    if (!vetoMode) return;
+    const tile = e.target.closest('.card-tile');
+    if (!tile) return;
+    if (e.target.closest('.veto-confirm-btn')) { confirmVeto(); return; }
+    if (e.target.closest('.veto-cancel-btn'))  { cancelVetoSelect(); return; }
+    if (e.target.closest('.veto-btn'))         { selectCardForVeto(tile.dataset.name); return; }
+  });
 }
 
 function onSettingsChange() {
@@ -92,119 +66,200 @@ function onSettingsChange() {
   const maxSetsInput = document.getElementById('max-sets');
   const minPerSetInput = document.getElementById('min-per-set');
 
-  // Keep max-sets capped at number of selected sets
   maxSetsInput.max = selected.length || 1;
-  if (parseInt(maxSetsInput.value) > selected.length) {
-    maxSetsInput.value = selected.length;
-  }
+  if (parseInt(maxSetsInput.value) > selected.length) maxSetsInput.value = selected.length;
 
   const players = parseInt(document.getElementById('players').value) || 2;
   renderPlayerInputs(players);
+  validateVetoCount();
 
-  // Warn if constraints are unsatisfiable
   const maxSets = parseInt(maxSetsInput.value) || 1;
   const minPerSet = parseInt(minPerSetInput.value) || 1;
-  const needed = maxSets * minPerSet;
   const warning = document.getElementById('constraint-warning');
-  if (needed > 10) {
-    warning.textContent = `Warning: ${maxSets} sets × ${minPerSet} min per set = ${needed} cards, but a kingdom only has 10. Reduce max sets or min per set.`;
+  if (maxSets * minPerSet > 10) {
+    warning.textContent = `Warning: ${maxSets} sets × ${minPerSet} min per set = ${maxSets * minPerSet} cards, but a kingdom only has 10.`;
     warning.hidden = false;
   } else {
     warning.hidden = true;
   }
 }
 
-function getSelectedSets() {
-  return Array.from(document.querySelectorAll('#set-checkboxes input:checked')).map(cb => cb.value);
-}
-
-function getCardCount(card, players) {
-  if (card.isVictory) {
-    return players === 2 ? 8 : 12;
-  }
-  return players <= 4 ? 10 : 12;
-}
-
-function generateKingdom() {
-  const selectedSetIds = getSelectedSets();
-  if (selectedSetIds.length === 0) {
-    showError('Select at least one set.');
-    return;
-  }
-
+function validateVetoCount() {
   const players = parseInt(document.getElementById('players').value) || 2;
-  renderBasicSupply(players);
-  const names = getPlayerNames(players);
-  showFirstPlayer(pickFirstPlayer(names, players));
-  const maxSets = Math.min(parseInt(document.getElementById('max-sets').value) || selectedSetIds.length, selectedSetIds.length);
+  const vetoCount = parseInt(document.getElementById('veto-count').value) || 0;
+  const warning = document.getElementById('veto-warning');
+  if (vetoCount > 0 && vetoCount % players !== 0) {
+    warning.textContent = `Must be a multiple of ${players}.`;
+    warning.hidden = false;
+    return false;
+  }
+  warning.hidden = true;
+  return true;
+}
+
+// ─── Card pool builder ────────────────────────────────────────────────────────
+
+function buildCardPool(totalCount) {
+  const selectedSetIds = getSelectedSets();
+  if (selectedSetIds.length === 0) { showError('Select at least one set.'); return null; }
+
+  const maxSets = Math.min(
+    parseInt(document.getElementById('max-sets').value) || selectedSetIds.length,
+    selectedSetIds.length
+  );
   const minPerSet = parseInt(document.getElementById('min-per-set').value) || 1;
 
-  if (maxSets * minPerSet > 10) {
-    showError('Constraints are unsatisfiable: reduce max sets or min per set.');
-    return;
+  if (maxSets * minPerSet > totalCount) {
+    showError(`Constraints require ${maxSets * minPerSet} cards but only ${totalCount} slots available.`);
+    return null;
   }
 
-  // Randomly pick which sets to draw from (up to maxSets)
   const shuffledSets = shuffle([...selectedSetIds]).slice(0, maxSets);
-
-  // Pool of cards per chosen set
   const poolBySet = {};
-  shuffledSets.forEach(setId => {
-    poolBySet[setId] = shuffle(allCards.filter(c => c.set === setId));
-  });
+  shuffledSets.forEach(id => { poolBySet[id] = shuffle(allCards.filter(c => c.set === id)); });
 
   const picked = [];
-
-  // Guarantee minimum per set
-  shuffledSets.forEach(setId => {
-    const toTake = Math.min(minPerSet, poolBySet[setId].length);
-    const taken = poolBySet[setId].splice(0, toTake);
-    picked.push(...taken);
+  shuffledSets.forEach(id => {
+    picked.push(...poolBySet[id].splice(0, Math.min(minPerSet, poolBySet[id].length)));
   });
 
-  // Fill remaining slots from the combined remaining pool
-  const remaining = shuffledSets.flatMap(setId => poolBySet[setId]);
-  shuffle(remaining);
+  const remaining = shuffle(shuffledSets.flatMap(id => poolBySet[id]));
   for (const card of remaining) {
-    if (picked.length >= 10) break;
+    if (picked.length >= totalCount) break;
     picked.push(card);
   }
 
-  kingdom = picked.slice(0, 10);
+  return picked.slice(0, totalCount);
+}
+
+// ─── Generate ────────────────────────────────────────────────────────────────
+
+function generateKingdom() {
+  resetVeto();
+  const cards = buildCardPool(10);
+  if (!cards) return;
+
+  const players = parseInt(document.getElementById('players').value) || 2;
+  renderBasicSupply(players);
+  showFirstPlayer(pickFirstPlayer(getPlayerNames(players), players));
+
+  kingdom = cards;
   sortKingdom();
   renderKingdom(players);
   hideError();
 }
+
+// ─── Veto ─────────────────────────────────────────────────────────────────────
+
+function startVeto() {
+  if (!validateVetoCount()) return;
+
+  const players = parseInt(document.getElementById('players').value) || 2;
+  const vetoCount = parseInt(document.getElementById('veto-count').value) || 0;
+
+  if (vetoCount === 0) { generateKingdom(); return; }
+
+  const cards = buildCardPool(10 + vetoCount);
+  if (!cards) return;
+
+  // Build veto order: each player appears vetoCount/players times, then shuffle
+  const names = getPlayerNames(players);
+  const vetosEach = vetoCount / players;
+  const queue = [];
+  for (let i = 0; i < vetosEach; i++) names.forEach(n => queue.push(n));
+  vetoQueue = shuffle(queue);
+  vetoIndex = 0;
+  vetoMode = true;
+  pendingVetoCard = null;
+
+  kingdom = cards;
+  sortKingdom();
+
+  renderBasicSupply(players);
+  updateVetoBanner();
+  renderKingdom(players);
+  hideError();
+}
+
+function selectCardForVeto(cardName) {
+  pendingVetoCard = cardName;
+  renderKingdom(parseInt(document.getElementById('players').value) || 2);
+}
+
+function cancelVetoSelect() {
+  pendingVetoCard = null;
+  renderKingdom(parseInt(document.getElementById('players').value) || 2);
+}
+
+function confirmVeto() {
+  if (!pendingVetoCard) return;
+  kingdom = kingdom.filter(c => c.name !== pendingVetoCard);
+  pendingVetoCard = null;
+  vetoIndex++;
+
+  const players = parseInt(document.getElementById('players').value) || 2;
+  if (vetoIndex >= vetoQueue.length) {
+    vetoMode = false;
+    sortKingdom();
+    showFirstPlayer(pickFirstPlayer(getPlayerNames(players), players));
+  } else {
+    updateVetoBanner();
+  }
+  renderKingdom(players);
+}
+
+function updateVetoBanner() {
+  const banner = document.getElementById('first-player-banner');
+  banner.textContent = `${vetoQueue[vetoIndex]} veto`;
+  banner.hidden = false;
+}
+
+function resetVeto() {
+  vetoMode = false;
+  vetoQueue = [];
+  vetoIndex = 0;
+  pendingVetoCard = null;
+  document.getElementById('first-player-banner').hidden = true;
+}
+
+// ─── Render kingdom ───────────────────────────────────────────────────────────
 
 function renderKingdom(players) {
   const grid = document.getElementById('kingdom-grid');
   const empty = document.getElementById('empty-state');
   grid.innerHTML = '';
 
-  if (kingdom.length === 0) {
-    empty.hidden = false;
-    return;
-  }
+  if (kingdom.length === 0) { empty.hidden = false; return; }
   empty.hidden = true;
 
   kingdom.forEach(card => {
     const count = getCardCount(card, players);
     const setInfo = allSets.find(s => s.id === card.set);
-    const imgUrl = cardImageUrl(card);
     const typeClass = card.types.includes('Attack') ? 'type-attack'
       : card.types.includes('Victory') ? 'type-victory'
       : card.types.includes('Reaction') ? 'type-reaction'
       : 'type-action';
 
+    const isSelected = pendingVetoCard === card.name;
     const tile = document.createElement('div');
-    tile.className = 'card-tile';
+    tile.className = `card-tile${vetoMode ? ' veto-active' : ''}${isSelected ? ' veto-selected' : ''}`;
+    tile.dataset.name = card.name;
+
+    let vetoHtml = '';
+    if (vetoMode) {
+      vetoHtml = isSelected
+        ? `<div class="veto-overlay">
+             <button class="veto-confirm-btn">✓ Confirm</button>
+             <button class="veto-cancel-btn">✕</button>
+           </div>`
+        : `<div class="veto-overlay"><button class="veto-btn">Veto</button></div>`;
+    }
+
     tile.innerHTML = `
       <div class="card-image-wrap">
-        <img
-          src="${imgUrl}"
-          alt="${card.name}"
-          onerror="this.closest('.card-image-wrap').classList.add('img-error'); this.remove();"
-        >
+        <img src="${cardImageUrl(card)}" alt="${card.name}"
+          onerror="this.closest('.card-image-wrap').classList.add('img-error'); this.remove();">
+        ${vetoHtml}
       </div>
       <div class="card-info">
         <div class="card-name">${card.name}</div>
@@ -222,9 +277,25 @@ function renderKingdom(players) {
   });
 }
 
-function cardImageUrl(card) {
-  return card.image || '';
+// ─── Sort ─────────────────────────────────────────────────────────────────────
+
+function sortKingdom() {
+  if (sortOrder === 'cost') {
+    kingdom.sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
+  } else {
+    kingdom.sort((a, b) => a.set.localeCompare(b.set) || a.name.localeCompare(b.name));
+  }
 }
+
+function toggleSort() {
+  sortOrder = sortOrder === 'cost' ? 'set' : 'cost';
+  document.getElementById('sort-btn').textContent =
+    sortOrder === 'cost' ? 'Sort: By Cost' : 'Sort: By Set/Name';
+  sortKingdom();
+  renderKingdom(parseInt(document.getElementById('players').value) || 2);
+}
+
+// ─── Basic supply ─────────────────────────────────────────────────────────────
 
 const BASIC_SUPPLY = [
   { name: 'Copper',   image: 'images/Copper.jpg',   types: ['Treasure'], getCount: p => 60 - 7 * p },
@@ -266,6 +337,50 @@ function renderBasicSupply(players) {
   });
 }
 
+// ─── Player names ─────────────────────────────────────────────────────────────
+
+function renderPlayerInputs(count) {
+  const container = document.getElementById('player-names');
+  const existing = Array.from(container.querySelectorAll('input')).map(i => i.value);
+  container.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'player-name-input';
+    input.placeholder = `Player ${i + 1}`;
+    input.value = existing[i] || '';
+    container.appendChild(input);
+  }
+}
+
+function getPlayerNames(count) {
+  return Array.from(document.querySelectorAll('.player-name-input'))
+    .map((inp, i) => inp.value.trim() || `Player ${i + 1}`);
+}
+
+function pickFirstPlayer(players, count) {
+  return players[Math.floor(Math.random() * count)];
+}
+
+function showFirstPlayer(name) {
+  const banner = document.getElementById('first-player-banner');
+  banner.textContent = `${name} goes first!`;
+  banner.hidden = false;
+}
+
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+function getSelectedSets() {
+  return Array.from(document.querySelectorAll('#set-checkboxes input:checked')).map(cb => cb.value);
+}
+
+function getCardCount(card, players) {
+  if (card.isVictory) return players === 2 ? 8 : 12;
+  return players <= 4 ? 10 : 12;
+}
+
+function cardImageUrl(card) { return card.image || ''; }
+
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -280,8 +395,6 @@ function showError(msg) {
   el.hidden = false;
 }
 
-function hideError() {
-  document.getElementById('error-msg').hidden = true;
-}
+function hideError() { document.getElementById('error-msg').hidden = true; }
 
 init();

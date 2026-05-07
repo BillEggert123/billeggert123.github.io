@@ -36,22 +36,28 @@
         <div id="player-names"></div>
       </div>
 
+      <div class="sidebar-section">
+        <h2>Veto</h2>
+        <div class="control-row">
+          <label for="veto-count">Cards to veto</label>
+          <input type="number" id="veto-count" min="0" value="0">
+        </div>
+        <div id="veto-warning" class="warning" hidden></div>
+      </div>
+
       <div id="constraint-warning" class="warning" hidden></div>
       <div id="error-msg" class="error" hidden></div>
 
       <button class="generate-btn" id="generate-btn">Generate Kingdom</button>
+      <button class="generate-btn veto-start-btn" id="veto-btn">Start Veto</button>
       <button class="sort-btn" id="sort-btn">Sort: By Cost</button>
       <div id="first-player-banner" class="first-player-banner" hidden></div>
     </aside>
 
     <!-- Main: kingdom display -->
     <main class="main">
-      <div class="section-header">
-        <h2>Basic Supply</h2>
-      </div>
       <div class="supply-grid" id="supply-grid"></div>
-
-      <div class="kingdom-grid" id="kingdom-grid" style="margin-top:1.75rem;"></div>
+      <div class="kingdom-grid" id="kingdom-grid"></div>
       <p class="empty-state" id="empty-state" hidden>No cards to show. Select a set and generate a kingdom.</p>
     </main>
   </div>
