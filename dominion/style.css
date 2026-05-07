@@ -197,14 +197,14 @@ header p {
 
 .supply-grid {
   display: grid;
-  grid-template-columns: repeat(7, 130px);
+  grid-template-columns: repeat(7, 180px);
   gap: 1rem;
   margin-bottom: 0.5rem;
 }
 
 .kingdom-grid {
   display: grid;
-  grid-template-columns: repeat(5, 130px);
+  grid-template-columns: repeat(5, 180px);
   gap: 1rem;
 }
 
