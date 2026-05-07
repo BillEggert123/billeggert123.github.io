@@ -197,15 +197,14 @@ header p {
 
 .supply-grid {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, 130px);
   gap: 1rem;
   margin-bottom: 0.5rem;
 }
 
 .kingdom-grid {
   display: grid;
-  /* each column = same width as a supply card: (100% - 6 gaps) / 7 */
-  grid-template-columns: repeat(3, calc((100% - 6 * 1rem) / 7));
+  grid-template-columns: repeat(5, 130px);
   gap: 1rem;
 }
 
@@ -273,7 +272,7 @@ header p {
   padding: 0.15rem 0.45rem;
   border-radius: 20px;
 }
-.type-action   { background: rgba(74, 111, 165, 0.25); color: #7aaae0; }
+.type-action   { background: rgba(120, 120, 120, 0.2);  color: #aaaaaa; }
 .type-attack   { background: rgba(139, 32, 32, 0.3);   color: #e07070; }
 .type-victory  { background: rgba(45, 110, 58, 0.3);   color: #6ecf82; }
 .type-reaction { background: rgba(90, 58, 138, 0.3);   color: #b08ae0; }
