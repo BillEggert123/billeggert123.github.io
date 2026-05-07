@@ -51,7 +51,7 @@ function sortKingdom() {
 function toggleSort() {
   sortOrder = sortOrder === 'cost' ? 'set' : 'cost';
   const btn = document.getElementById('sort-btn');
-  btn.textContent = sortOrder === 'cost' ? 'Sort: By Cost' : 'Sort: By Set';
+  btn.textContent = sortOrder === 'cost' ? 'Sort: By Cost' : 'Sort: By Set/Name';
   sortKingdom();
   const players = parseInt(document.getElementById('players').value) || 2;
   renderKingdom(players);
