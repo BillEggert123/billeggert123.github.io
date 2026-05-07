@@ -1,7 +1,6 @@
 let allCards = [];
 let allSets = [];
 let kingdom = [];
-let cardImageMap = {}; // name -> direct image URL
 
 async function init() {
   const res = await fetch('data/cards.json');
@@ -11,40 +10,7 @@ async function init() {
 
   renderSetCheckboxes();
   setupControls();
-
-  // Fetch real image URLs from the wiki API (CORS-enabled), then render
-  await fetchWikiImageUrls();
   generateKingdom();
-}
-
-async function fetchWikiImageUrls() {
-  const titles = allCards
-    .map(c => 'File:Card_' + c.name.replace(/ /g, '_') + '.jpg')
-    .join('|');
-
-  const url = 'https://wiki.dominionstrategy.com/api.php?' + new URLSearchParams({
-    action: 'query',
-    prop: 'imageinfo',
-    iiprop: 'url',
-    format: 'json',
-    origin: '*',
-    titles,
-  });
-
-  try {
-    const res = await fetch(url);
-    const data = await res.json();
-    for (const page of Object.values(data.query.pages)) {
-      if (page.imageinfo && page.imageinfo[0]) {
-        // Strip "File:Card_" prefix and ".jpg" suffix to get card name
-        const fileName = page.title.replace('File:Card_', '').replace('.jpg', '').replace(/_/g, ' ');
-        cardImageMap[fileName] = page.imageinfo[0].url;
-      }
-    }
-  } catch (e) {
-    // Images will fall back to the placeholder gracefully
-    console.warn('Could not fetch wiki image URLs:', e);
-  }
 }
 
 function renderSetCheckboxes() {
@@ -169,7 +135,7 @@ function renderKingdom(players) {
   kingdom.forEach(card => {
     const count = getCardCount(card, players);
     const setInfo = allSets.find(s => s.id === card.set);
-    const imgUrl = cardImageUrl(card.name);
+    const imgUrl = cardImageUrl(card);
     const typeClass = card.types.includes('Attack') ? 'type-attack'
       : card.types.includes('Victory') ? 'type-victory'
       : card.types.includes('Reaction') ? 'type-reaction'
@@ -201,8 +167,8 @@ function renderKingdom(players) {
   });
 }
 
-function cardImageUrl(name) {
-  return cardImageMap[name] || '';
+function cardImageUrl(card) {
+  return card.image || '';
 }
 
 function shuffle(arr) {
