@@ -1,0 +1,193 @@
+{
+  "sets": [
+    {
+      "id": "base2",
+      "name": "Base Set (2nd Ed.)",
+      "year": 2016
+    }
+  ],
+  "cards": [
+    {
+      "name": "Artisan",
+      "set": "base2",
+      "cost": 6,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Bandit",
+      "set": "base2",
+      "cost": 5,
+      "types": ["Action", "Attack"],
+      "isVictory": false
+    },
+    {
+      "name": "Bureaucrat",
+      "set": "base2",
+      "cost": 4,
+      "types": ["Action", "Attack"],
+      "isVictory": false
+    },
+    {
+      "name": "Cellar",
+      "set": "base2",
+      "cost": 2,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Chapel",
+      "set": "base2",
+      "cost": 2,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Council Room",
+      "set": "base2",
+      "cost": 5,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Festival",
+      "set": "base2",
+      "cost": 5,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Gardens",
+      "set": "base2",
+      "cost": 4,
+      "types": ["Victory"],
+      "isVictory": true
+    },
+    {
+      "name": "Harbinger",
+      "set": "base2",
+      "cost": 3,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Laboratory",
+      "set": "base2",
+      "cost": 5,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Library",
+      "set": "base2",
+      "cost": 5,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Market",
+      "set": "base2",
+      "cost": 5,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Merchant",
+      "set": "base2",
+      "cost": 3,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Militia",
+      "set": "base2",
+      "cost": 4,
+      "types": ["Action", "Attack"],
+      "isVictory": false
+    },
+    {
+      "name": "Mine",
+      "set": "base2",
+      "cost": 5,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Moat",
+      "set": "base2",
+      "cost": 2,
+      "types": ["Action", "Reaction"],
+      "isVictory": false
+    },
+    {
+      "name": "Moneylender",
+      "set": "base2",
+      "cost": 4,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Poacher",
+      "set": "base2",
+      "cost": 4,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Remodel",
+      "set": "base2",
+      "cost": 4,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Sentry",
+      "set": "base2",
+      "cost": 5,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Smithy",
+      "set": "base2",
+      "cost": 4,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Throne Room",
+      "set": "base2",
+      "cost": 4,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Vassal",
+      "set": "base2",
+      "cost": 3,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Village",
+      "set": "base2",
+      "cost": 3,
+      "types": ["Action"],
+      "isVictory": false
+    },
+    {
+      "name": "Witch",
+      "set": "base2",
+      "cost": 5,
+      "types": ["Action", "Attack"],
+      "isVictory": false
+    },
+    {
+      "name": "Workshop",
+      "set": "base2",
+      "cost": 3,
+      "types": ["Action"],
+      "isVictory": false
+    }
+  ]
+}
