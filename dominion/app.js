@@ -11,6 +11,7 @@ async function init() {
   renderSetCheckboxes();
   setupControls();
   generateKingdom();
+  renderBasicSupply(2);
 }
 
 function renderSetCheckboxes() {
@@ -79,6 +80,7 @@ function generateKingdom() {
   }
 
   const players = parseInt(document.getElementById('players').value) || 2;
+  renderBasicSupply(players);
   const maxSets = Math.min(parseInt(document.getElementById('max-sets').value) || selectedSetIds.length, selectedSetIds.length);
   const minPerSet = parseInt(document.getElementById('min-per-set').value) || 1;
 
@@ -169,6 +171,46 @@ function renderKingdom(players) {
 
 function cardImageUrl(card) {
   return card.image || '';
+}
+
+const BASIC_SUPPLY = [
+  { name: 'Copper',   image: 'images/Copper.jpg',   types: ['Treasure'], getCount: p => 60 - 7 * p },
+  { name: 'Silver',   image: 'images/Silver.jpg',   types: ['Treasure'], getCount: _p => 40 },
+  { name: 'Gold',     image: 'images/Gold.jpg',     types: ['Treasure'], getCount: _p => 30 },
+  { name: 'Estate',   image: 'images/Estate.jpg',   types: ['Victory'],  getCount: p => p === 2 ? 8 : 12 },
+  { name: 'Duchy',    image: 'images/Duchy.jpg',    types: ['Victory'],  getCount: p => p === 2 ? 8 : 12 },
+  { name: 'Province', image: 'images/Province.jpg', types: ['Victory'],  getCount: p => p === 2 ? 8 : 12 },
+  { name: 'Curse',    image: 'images/Curse.jpg',    types: ['Curse'],    getCount: p => 10 * (p - 1) },
+];
+
+function renderBasicSupply(players) {
+  const grid = document.getElementById('supply-grid');
+  grid.innerHTML = '';
+  BASIC_SUPPLY.forEach(card => {
+    const count = card.getCount(players);
+    const typeClass = card.types[0] === 'Treasure' ? 'type-treasure'
+      : card.types[0] === 'Victory' ? 'type-victory'
+      : 'type-curse';
+    const tile = document.createElement('div');
+    tile.className = 'card-tile';
+    tile.innerHTML = `
+      <div class="card-image-wrap">
+        <img src="${card.image}" alt="${card.name}"
+          onerror="this.closest('.card-image-wrap').classList.add('img-error'); this.remove();">
+      </div>
+      <div class="card-info">
+        <div class="card-name">${card.name}</div>
+        <div class="card-meta">
+          <span class="card-type ${typeClass}">${card.types[0]}</span>
+        </div>
+        <div class="card-footer">
+          <span class="card-set">Base</span>
+          <span class="card-count">×${count}</span>
+        </div>
+      </div>
+    `;
+    grid.appendChild(tile);
+  });
 }
 
 function shuffle(arr) {
