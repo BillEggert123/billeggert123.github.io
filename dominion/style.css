@@ -107,6 +107,34 @@ header p {
 }
 .control-row input[type=number]:focus { border-color: var(--accent); }
 
+.player-name-input {
+  display: block;
+  width: 100%;
+  background: #1a1208;
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius);
+  color: var(--text);
+  padding: 0.4rem 0.75rem;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+.player-name-input:focus { border-color: var(--accent); }
+
+.first-player-banner {
+  background: linear-gradient(135deg, rgba(200,146,42,0.2), rgba(200,146,42,0.08));
+  border: 1px solid var(--accent);
+  border-radius: var(--radius);
+  color: var(--accent);
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.02em;
+}
+
 .generate-btn {
   width: 100%;
   padding: 0.75rem;
@@ -176,7 +204,8 @@ header p {
 
 .kingdom-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /* each column = same width as a supply card: (100% - 6 gaps) / 7 */
+  grid-template-columns: repeat(3, calc((100% - 6 * 1rem) / 7));
   gap: 1rem;
 }
 

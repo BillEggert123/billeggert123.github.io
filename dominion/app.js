@@ -10,6 +10,7 @@ async function init() {
 
   renderSetCheckboxes();
   setupControls();
+  renderPlayerInputs(2);
   generateKingdom();
   renderBasicSupply(2);
 }
@@ -37,6 +38,42 @@ function setupControls() {
   document.getElementById('generate-btn').addEventListener('click', generateKingdom);
 }
 
+function renderPlayerInputs(count) {
+  const container = document.getElementById('player-names');
+  // Preserve any names already typed
+  const existing = Array.from(container.querySelectorAll('input')).map(i => i.value);
+  container.innerHTML = '';
+  for (let i = 0; i < count; i++) {
+    const input = document.createElement('input');
+    input.type = 'text';
+    input.className = 'player-name-input';
+    input.placeholder = `Player ${i + 1}`;
+    input.value = existing[i] || '';
+    container.appendChild(input);
+  }
+}
+
+function getPlayerNames(count) {
+  const inputs = document.querySelectorAll('.player-name-input');
+  return Array.from(inputs).map((inp, i) => inp.value.trim() || `Player ${i + 1}`);
+}
+
+function pickFirstPlayer(players, count) {
+  return players[Math.floor(Math.random() * count)];
+}
+
+function showFirstPlayer(name) {
+  let banner = document.getElementById('first-player-banner');
+  if (!banner) {
+    banner = document.createElement('div');
+    banner.id = 'first-player-banner';
+    banner.className = 'first-player-banner';
+    document.querySelector('.main').prepend(banner);
+  }
+  banner.textContent = `${name} goes first!`;
+  banner.hidden = false;
+}
+
 function onSettingsChange() {
   const selected = getSelectedSets();
   const maxSetsInput = document.getElementById('max-sets');
@@ -47,6 +84,9 @@ function onSettingsChange() {
   if (parseInt(maxSetsInput.value) > selected.length) {
     maxSetsInput.value = selected.length;
   }
+
+  const players = parseInt(document.getElementById('players').value) || 2;
+  renderPlayerInputs(players);
 
   // Warn if constraints are unsatisfiable
   const maxSets = parseInt(maxSetsInput.value) || 1;
@@ -81,6 +121,8 @@ function generateKingdom() {
 
   const players = parseInt(document.getElementById('players').value) || 2;
   renderBasicSupply(players);
+  const names = getPlayerNames(players);
+  showFirstPlayer(pickFirstPlayer(names, players));
   const maxSets = Math.min(parseInt(document.getElementById('max-sets').value) || selectedSetIds.length, selectedSetIds.length);
   const minPerSet = parseInt(document.getElementById('min-per-set').value) || 1;
 
