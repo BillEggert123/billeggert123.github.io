@@ -210,14 +210,14 @@ header p {
 
 .supply-grid {
   display: grid;
-  grid-template-columns: repeat(7, 180px);
+  grid-template-columns: repeat(7, 195px);
   gap: 1rem;
   margin-bottom: 0.5rem;
 }
 
 .kingdom-grid {
   display: grid;
-  grid-template-columns: repeat(5, 180px);
+  grid-template-columns: repeat(5, 195px);
   gap: 1rem;
 }
 
@@ -268,8 +268,9 @@ header p {
 .card-meta {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+  gap: 0.4rem;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 .card-cost {
@@ -278,7 +279,7 @@ header p {
 }
 
 .card-type {
-  font-size: 0.68rem;
+  font-size: 0.6rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.05em;
