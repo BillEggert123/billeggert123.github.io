@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dominion Kingdom Generator</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div>
+      <h1>Dominion Kingdom Generator</h1>
+      <p>Randomly build a 10-card kingdom from your collection</p>
+    </div>
+  </header>
+
+  <div class="layout">
+    <!-- Sidebar: controls -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h2>Sets</h2>
+        <div id="set-checkboxes"></div>
+      </div>
+
+      <div class="sidebar-section">
+        <h2>Options</h2>
+        <div class="control-row">
+          <label for="players">Number of players</label>
+          <input type="number" id="players" min="2" max="6" value="2">
+        </div>
+        <div class="control-row">
+          <label for="max-sets">Max sets to draw from</label>
+          <input type="number" id="max-sets" min="1" max="1" value="1">
+        </div>
+        <div class="control-row">
+          <label for="min-per-set">Min cards per set</label>
+          <input type="number" id="min-per-set" min="1" max="10" value="1">
+        </div>
+      </div>
+
+      <div id="constraint-warning" class="warning" hidden></div>
+      <div id="error-msg" class="error" hidden></div>
+
+      <button class="generate-btn" id="generate-btn">Generate Kingdom</button>
+    </aside>
+
+    <!-- Main: kingdom display -->
+    <main class="main">
+      <div class="main-header">
+        <h2>Kingdom</h2>
+        <span class="kingdom-count" id="kingdom-count"></span>
+      </div>
+      <div class="kingdom-grid" id="kingdom-grid"></div>
+      <p class="empty-state" id="empty-state" hidden>No cards to show. Select a set and generate a kingdom.</p>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
