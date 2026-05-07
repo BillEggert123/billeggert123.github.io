@@ -1,6 +1,7 @@
 let allCards = [];
 let allSets = [];
 let kingdom = [];
+let sortOrder = 'cost'; // 'cost' | 'set'
 
 async function init() {
   const res = await fetch('data/cards.json');
@@ -36,6 +37,24 @@ function setupControls() {
   document.getElementById('max-sets').addEventListener('change', onSettingsChange);
   document.getElementById('min-per-set').addEventListener('change', onSettingsChange);
   document.getElementById('generate-btn').addEventListener('click', generateKingdom);
+  document.getElementById('sort-btn').addEventListener('click', toggleSort);
+}
+
+function sortKingdom() {
+  if (sortOrder === 'cost') {
+    kingdom.sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
+  } else {
+    kingdom.sort((a, b) => a.set.localeCompare(b.set) || a.name.localeCompare(b.name));
+  }
+}
+
+function toggleSort() {
+  sortOrder = sortOrder === 'cost' ? 'set' : 'cost';
+  const btn = document.getElementById('sort-btn');
+  btn.textContent = sortOrder === 'cost' ? 'Sort: By Cost' : 'Sort: By Set';
+  sortKingdom();
+  const players = parseInt(document.getElementById('players').value) || 2;
+  renderKingdom(players);
 }
 
 function renderPlayerInputs(count) {
@@ -63,13 +82,7 @@ function pickFirstPlayer(players, count) {
 }
 
 function showFirstPlayer(name) {
-  let banner = document.getElementById('first-player-banner');
-  if (!banner) {
-    banner = document.createElement('div');
-    banner.id = 'first-player-banner';
-    banner.className = 'first-player-banner';
-    document.querySelector('.main').prepend(banner);
-  }
+  const banner = document.getElementById('first-player-banner');
   banner.textContent = `${name} goes first!`;
   banner.hidden = false;
 }
@@ -157,7 +170,8 @@ function generateKingdom() {
     picked.push(card);
   }
 
-  kingdom = picked.slice(0, 10).sort((a, b) => a.cost - b.cost || a.name.localeCompare(b.name));
+  kingdom = picked.slice(0, 10);
+  sortKingdom();
   renderKingdom(players);
   hideError();
 }
@@ -166,9 +180,6 @@ function renderKingdom(players) {
   const grid = document.getElementById('kingdom-grid');
   const empty = document.getElementById('empty-state');
   grid.innerHTML = '';
-
-  document.getElementById('kingdom-count').textContent =
-    kingdom.length ? `${kingdom.length} cards · ${players} player${players !== 1 ? 's' : ''}` : '';
 
   if (kingdom.length === 0) {
     empty.hidden = false;

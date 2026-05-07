@@ -7,13 +7,6 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <div>
-      <h1>Dominion Kingdom Generator</h1>
-      <p>Randomly build a 10-card kingdom from your collection</p>
-    </div>
-  </header>
-
   <div class="layout">
     <!-- Sidebar: controls -->
     <aside class="sidebar">
@@ -47,6 +40,8 @@
       <div id="error-msg" class="error" hidden></div>
 
       <button class="generate-btn" id="generate-btn">Generate Kingdom</button>
+      <button class="sort-btn" id="sort-btn">Sort: By Cost</button>
+      <div id="first-player-banner" class="first-player-banner" hidden></div>
     </aside>
 
     <!-- Main: kingdom display -->
@@ -56,11 +51,7 @@
       </div>
       <div class="supply-grid" id="supply-grid"></div>
 
-      <div class="section-header" style="margin-top:1.75rem;">
-        <h2>Kingdom</h2>
-        <span class="kingdom-count" id="kingdom-count"></span>
-      </div>
-      <div class="kingdom-grid" id="kingdom-grid"></div>
+      <div class="kingdom-grid" id="kingdom-grid" style="margin-top:1.75rem;"></div>
       <p class="empty-state" id="empty-state" hidden>No cards to show. Select a set and generate a kingdom.</p>
     </main>
   </div>
