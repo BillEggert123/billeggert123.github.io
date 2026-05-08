@@ -4,6 +4,11 @@
       "id": "base2",
       "name": "Base Set (2nd Ed.)",
       "year": 2016
+    },
+    {
+      "id": "intrigue2",
+      "name": "Intrigue (2nd Ed.)",
+      "year": 2016
     }
   ],
   "cards": [
@@ -32,6 +37,33 @@
     { "name": "Vassal",       "set": "base2", "cost": 3, "types": ["Action"],            "isVictory": false, "image": "images/Vassal.jpg" },
     { "name": "Village",      "set": "base2", "cost": 3, "types": ["Action"],            "isVictory": false, "image": "images/Village.jpg" },
     { "name": "Witch",        "set": "base2", "cost": 5, "types": ["Action","Attack"],   "isVictory": false, "image": "images/Witch.jpg" },
-    { "name": "Workshop",     "set": "base2", "cost": 3, "types": ["Action"],            "isVictory": false, "image": "images/Workshop.jpg" }
+    { "name": "Workshop",     "set": "base2", "cost": 3, "types": ["Action"],            "isVictory": false, "image": "images/Workshop.jpg" },
+
+    { "name": "Baron",          "set": "intrigue2", "cost": 4, "types": ["Action"],                     "isVictory": false, "image": "images/Baron.jpg" },
+    { "name": "Bridge",         "set": "intrigue2", "cost": 4, "types": ["Action"],                     "isVictory": false, "image": "images/Bridge.jpg" },
+    { "name": "Conspirator",    "set": "intrigue2", "cost": 4, "types": ["Action"],                     "isVictory": false, "image": "images/Conspirator.jpg" },
+    { "name": "Courtier",       "set": "intrigue2", "cost": 5, "types": ["Action"],                     "isVictory": false, "image": "images/Courtier.jpg" },
+    { "name": "Courtyard",      "set": "intrigue2", "cost": 2, "types": ["Action"],                     "isVictory": false, "image": "images/Courtyard.jpg" },
+    { "name": "Diplomat",       "set": "intrigue2", "cost": 4, "types": ["Action","Reaction"],           "isVictory": false, "image": "images/Diplomat.jpg" },
+    { "name": "Duke",           "set": "intrigue2", "cost": 5, "types": ["Victory"],                    "isVictory": true,  "image": "images/Duke.jpg" },
+    { "name": "Harem",          "set": "intrigue2", "cost": 6, "types": ["Treasure","Victory"],          "isVictory": true,  "image": "images/Harem.jpg" },
+    { "name": "Ironworks",      "set": "intrigue2", "cost": 4, "types": ["Action"],                     "isVictory": false, "image": "images/Ironworks.jpg" },
+    { "name": "Lurker",         "set": "intrigue2", "cost": 2, "types": ["Action"],                     "isVictory": false, "image": "images/Lurker.jpg" },
+    { "name": "Masquerade",     "set": "intrigue2", "cost": 3, "types": ["Action"],                     "isVictory": false, "image": "images/Masquerade.jpg" },
+    { "name": "Mill",           "set": "intrigue2", "cost": 4, "types": ["Action","Victory"],            "isVictory": true,  "image": "images/Mill.jpg" },
+    { "name": "Mining Village", "set": "intrigue2", "cost": 4, "types": ["Action"],                     "isVictory": false, "image": "images/Mining_Village.jpg" },
+    { "name": "Minion",         "set": "intrigue2", "cost": 5, "types": ["Action","Attack"],             "isVictory": false, "image": "images/Minion.jpg" },
+    { "name": "Nobles",         "set": "intrigue2", "cost": 6, "types": ["Action","Victory"],            "isVictory": true,  "image": "images/Nobles.jpg" },
+    { "name": "Patrol",         "set": "intrigue2", "cost": 5, "types": ["Action"],                     "isVictory": false, "image": "images/Patrol.jpg" },
+    { "name": "Pawn",           "set": "intrigue2", "cost": 2, "types": ["Action"],                     "isVictory": false, "image": "images/Pawn.jpg" },
+    { "name": "Replace",        "set": "intrigue2", "cost": 5, "types": ["Action","Attack"],             "isVictory": false, "image": "images/Replace.jpg" },
+    { "name": "Secret Passage", "set": "intrigue2", "cost": 4, "types": ["Action"],                     "isVictory": false, "image": "images/Secret_Passage.jpg" },
+    { "name": "Shanty Town",    "set": "intrigue2", "cost": 3, "types": ["Action"],                     "isVictory": false, "image": "images/Shanty_Town.jpg" },
+    { "name": "Steward",        "set": "intrigue2", "cost": 3, "types": ["Action"],                     "isVictory": false, "image": "images/Steward.jpg" },
+    { "name": "Swindler",       "set": "intrigue2", "cost": 3, "types": ["Action","Attack"],             "isVictory": false, "image": "images/Swindler.jpg" },
+    { "name": "Torturer",       "set": "intrigue2", "cost": 5, "types": ["Action","Attack"],             "isVictory": false, "image": "images/Torturer.jpg" },
+    { "name": "Trading Post",   "set": "intrigue2", "cost": 5, "types": ["Action"],                     "isVictory": false, "image": "images/Trading_Post.jpg" },
+    { "name": "Upgrade",        "set": "intrigue2", "cost": 5, "types": ["Action"],                     "isVictory": false, "image": "images/Upgrade.jpg" },
+    { "name": "Wishing Well",   "set": "intrigue2", "cost": 3, "types": ["Action"],                     "isVictory": false, "image": "images/Wishing_Well.jpg" }
   ]
 }

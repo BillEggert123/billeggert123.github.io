@@ -237,8 +237,9 @@ function renderKingdom(players) {
     const count = getCardCount(card, players);
     const setInfo = allSets.find(s => s.id === card.set);
     const typeClass = card.types.includes('Attack') ? 'type-attack'
-      : card.types.includes('Victory') ? 'type-victory'
       : card.types.includes('Reaction') ? 'type-reaction'
+      : card.types.includes('Victory') ? 'type-victory'
+      : card.types.includes('Treasure') ? 'type-treasure'
       : 'type-action';
 
     const isSelected = pendingVetoCard === card.name;
