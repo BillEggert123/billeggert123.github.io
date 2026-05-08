@@ -81,7 +81,7 @@
     { "name": "Sea Chart",      "set": "seaside2", "cost": 3, "types": ["Action"],                      "isVictory": false, "image": "images/Sea_Chart.jpg" },
     { "name": "Smugglers",      "set": "seaside2", "cost": 3, "types": ["Action"],                      "isVictory": false, "image": "images/Smugglers.jpg" },
     { "name": "Warehouse",      "set": "seaside2", "cost": 3, "types": ["Action"],                      "isVictory": false, "image": "images/Warehouse.jpg" },
-    { "name": "Blockade",       "set": "seaside2", "cost": 4, "types": ["Action","Attack","Duration"],   "isVictory": false, "image": "images/Blockade.jpg" },
+    { "name": "Blockade",       "set": "seaside2", "cost": 4, "types": ["Action","Duration","Attack"],   "isVictory": false, "image": "images/Blockade.jpg" },
     { "name": "Caravan",        "set": "seaside2", "cost": 4, "types": ["Action","Duration"],            "isVictory": false, "image": "images/Caravan.jpg" },
     { "name": "Cutpurse",       "set": "seaside2", "cost": 4, "types": ["Action","Attack"],              "isVictory": false, "image": "images/Cutpurse.jpg" },
     { "name": "Island",         "set": "seaside2", "cost": 4, "types": ["Action","Victory"],             "isVictory": true,  "image": "images/Island.jpg" },
