@@ -208,9 +208,19 @@ header p {
   color: var(--text-muted);
 }
 
+.prosperity-note {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 0.5rem;
+}
+.prosperity-note.prosperity-active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
 .supply-grid {
   display: grid;
-  grid-template-columns: repeat(7, 215px);
+  grid-template-columns: repeat(auto-fill, 215px);
   gap: 1rem;
   margin-bottom: 1rem;
 }

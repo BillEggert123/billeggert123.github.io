@@ -9,6 +9,10 @@ let vetoQueue = [];    // ordered list of player names for each veto turn
 let vetoIndex = 0;
 let pendingVetoCard = null; // card name currently selected for veto
 
+// Prosperity state
+let usePlatinumColony = false;
+let prosperityPickedCard = null;
+
 // ─── Init ────────────────────────────────────────────────────────────────────
 
 async function init() {
@@ -139,11 +143,11 @@ function generateKingdom() {
   const cards = buildCardPool(10);
   if (!cards) return;
 
+  kingdom = cards;
   const players = parseInt(document.getElementById('players').value) || 2;
+  checkProsperityRule();
   renderBasicSupply(players);
   showFirstPlayer(pickFirstPlayer(getPlayerNames(players), players));
-
-  kingdom = cards;
   sortKingdom();
   renderKingdom(players);
   hideError();
@@ -202,6 +206,8 @@ function confirmVeto() {
   if (vetoIndex >= vetoQueue.length) {
     vetoMode = false;
     sortKingdom();
+    checkProsperityRule();
+    renderBasicSupply(players);
     showFirstPlayer(pickFirstPlayer(getPlayerNames(players), players));
   } else {
     updateVetoBanner();
@@ -220,7 +226,33 @@ function resetVeto() {
   vetoQueue = [];
   vetoIndex = 0;
   pendingVetoCard = null;
+  usePlatinumColony = false;
+  prosperityPickedCard = null;
   document.getElementById('first-player-banner').hidden = true;
+  document.getElementById('prosperity-note').hidden = true;
+}
+
+// ─── Prosperity rule ──────────────────────────────────────────────────────────
+
+function checkProsperityRule() {
+  if (kingdom.length === 0) { usePlatinumColony = false; prosperityPickedCard = null; return; }
+  const picked = kingdom[Math.floor(Math.random() * kingdom.length)];
+  prosperityPickedCard = picked.name;
+  usePlatinumColony = picked.set === 'prosperity2';
+  renderProsperityNote();
+}
+
+function renderProsperityNote() {
+  const note = document.getElementById('prosperity-note');
+  if (!prosperityPickedCard) { note.hidden = true; return; }
+  note.hidden = false;
+  if (usePlatinumColony) {
+    note.className = 'prosperity-note prosperity-active';
+    note.textContent = `Prosperity! (picked: ${prosperityPickedCard}) — Platinum & Colony added`;
+  } else {
+    note.className = 'prosperity-note';
+    note.textContent = `No Prosperity (picked: ${prosperityPickedCard})`;
+  }
 }
 
 // ─── Render kingdom ───────────────────────────────────────────────────────────
@@ -306,16 +338,20 @@ const BASIC_SUPPLY = [
   { name: 'Copper',   image: 'images/Copper.jpg',   types: ['Treasure'], cost: 0, getCount: p => 60 - 7 * p },
   { name: 'Silver',   image: 'images/Silver.jpg',   types: ['Treasure'], cost: 3, getCount: _p => 40 },
   { name: 'Gold',     image: 'images/Gold.jpg',     types: ['Treasure'], cost: 6, getCount: _p => 30 },
+  { name: 'Platinum', image: 'images/Platinum.jpg', types: ['Treasure'], cost: 9, getCount: _p => 12 },
   { name: 'Estate',   image: 'images/Estate.jpg',   types: ['Victory'],  cost: 2, getCount: p => p === 2 ? 8 : 12 },
   { name: 'Duchy',    image: 'images/Duchy.jpg',    types: ['Victory'],  cost: 5, getCount: p => p === 2 ? 8 : 12 },
   { name: 'Province', image: 'images/Province.jpg', types: ['Victory'],  cost: 8, getCount: p => p === 2 ? 8 : 12 },
+  { name: 'Colony',   image: 'images/Colony.jpg',   types: ['Victory'],  cost: 11, getCount: p => p === 2 ? 8 : 12 },
   { name: 'Curse',    image: 'images/Curse.jpg',    types: ['Curse'],    cost: 0, getCount: p => 10 * (p - 1) },
 ];
 
 function renderBasicSupply(players) {
   const grid = document.getElementById('supply-grid');
   grid.innerHTML = '';
+  const prosperityNames = new Set(['Platinum', 'Colony']);
   BASIC_SUPPLY.forEach(card => {
+    if (prosperityNames.has(card.name) && !usePlatinumColony) return;
     const count = card.getCount(players);
     const typeClass = card.types[0] === 'Treasure' ? 'type-treasure'
       : card.types[0] === 'Victory' ? 'type-victory'

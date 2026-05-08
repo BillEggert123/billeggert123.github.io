@@ -14,6 +14,11 @@
       "id": "seaside2",
       "name": "Seaside (2nd Ed.)",
       "year": 2022
+    },
+    {
+      "id": "prosperity2",
+      "name": "Prosperity (2nd Ed.)",
+      "year": 2022
     }
   ],
   "cards": [
@@ -97,6 +102,32 @@
     { "name": "Sea Witch",      "set": "seaside2", "cost": 5, "types": ["Action","Duration","Attack"],   "isVictory": false, "image": "images/Sea_Witch.jpg" },
     { "name": "Tactician",      "set": "seaside2", "cost": 5, "types": ["Action","Duration"],            "isVictory": false, "image": "images/Tactician.jpg" },
     { "name": "Treasury",       "set": "seaside2", "cost": 5, "types": ["Action"],                      "isVictory": false, "image": "images/Treasury.jpg" },
-    { "name": "Wharf",          "set": "seaside2", "cost": 5, "types": ["Action","Duration"],            "isVictory": false, "image": "images/Wharf.jpg" }
+    { "name": "Wharf",          "set": "seaside2", "cost": 5, "types": ["Action","Duration"],            "isVictory": false, "image": "images/Wharf.jpg" },
+
+    { "name": "Anvil",          "set": "prosperity2", "cost": 3, "types": ["Action"],              "isVictory": false, "image": "images/Anvil.jpg" },
+    { "name": "Watchtower",     "set": "prosperity2", "cost": 3, "types": ["Action","Reaction"],   "isVictory": false, "image": "images/Watchtower.jpg" },
+    { "name": "Bishop",         "set": "prosperity2", "cost": 4, "types": ["Action"],              "isVictory": false, "image": "images/Bishop.jpg" },
+    { "name": "Clerk",          "set": "prosperity2", "cost": 4, "types": ["Action","Attack"],     "isVictory": false, "image": "images/Clerk.jpg" },
+    { "name": "Investment",     "set": "prosperity2", "cost": 4, "types": ["Action"],              "isVictory": false, "image": "images/Investment.jpg" },
+    { "name": "Monument",       "set": "prosperity2", "cost": 4, "types": ["Action"],              "isVictory": false, "image": "images/Monument.jpg" },
+    { "name": "Quarry",         "set": "prosperity2", "cost": 4, "types": ["Treasure"],            "isVictory": false, "image": "images/Quarry.jpg" },
+    { "name": "Tiara",          "set": "prosperity2", "cost": 4, "types": ["Treasure"],            "isVictory": false, "image": "images/Tiara.jpg" },
+    { "name": "Worker's Village","set": "prosperity2", "cost": 4, "types": ["Action"],             "isVictory": false, "image": "images/Worker's_Village.jpg" },
+    { "name": "Charlatan",      "set": "prosperity2", "cost": 5, "types": ["Action","Attack"],     "isVictory": false, "image": "images/Charlatan.jpg" },
+    { "name": "City",           "set": "prosperity2", "cost": 5, "types": ["Action"],              "isVictory": false, "image": "images/City.jpg" },
+    { "name": "Collection",     "set": "prosperity2", "cost": 5, "types": ["Treasure"],            "isVictory": false, "image": "images/Collection.jpg" },
+    { "name": "Crystal Ball",   "set": "prosperity2", "cost": 5, "types": ["Treasure"],            "isVictory": false, "image": "images/Crystal_Ball.jpg" },
+    { "name": "Magnate",        "set": "prosperity2", "cost": 5, "types": ["Action"],              "isVictory": false, "image": "images/Magnate.jpg" },
+    { "name": "Mint",           "set": "prosperity2", "cost": 5, "types": ["Action"],              "isVictory": false, "image": "images/Mint.jpg" },
+    { "name": "Rabble",         "set": "prosperity2", "cost": 5, "types": ["Action","Attack"],     "isVictory": false, "image": "images/Rabble.jpg" },
+    { "name": "Vault",          "set": "prosperity2", "cost": 5, "types": ["Action"],              "isVictory": false, "image": "images/Vault.jpg" },
+    { "name": "War Chest",      "set": "prosperity2", "cost": 5, "types": ["Treasure"],            "isVictory": false, "image": "images/War_Chest.jpg" },
+    { "name": "Hoard",          "set": "prosperity2", "cost": 6, "types": ["Treasure"],            "isVictory": false, "image": "images/Hoard.jpg" },
+    { "name": "Grand Market",   "set": "prosperity2", "cost": 6, "types": ["Action"],              "isVictory": false, "image": "images/Grand_Market.jpg" },
+    { "name": "Bank",           "set": "prosperity2", "cost": 7, "types": ["Treasure"],            "isVictory": false, "image": "images/Bank.jpg" },
+    { "name": "Expand",         "set": "prosperity2", "cost": 7, "types": ["Action"],              "isVictory": false, "image": "images/Expand.jpg" },
+    { "name": "Forge",          "set": "prosperity2", "cost": 7, "types": ["Action"],              "isVictory": false, "image": "images/Forge.jpg" },
+    { "name": "King's Court",   "set": "prosperity2", "cost": 7, "types": ["Action"],              "isVictory": false, "image": "images/King's_Court.jpg" },
+    { "name": "Peddler",        "set": "prosperity2", "cost": 8, "types": ["Action"],              "isVictory": false, "image": "images/Peddler.jpg" }
   ]
 }
