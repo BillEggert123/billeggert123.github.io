@@ -291,6 +291,7 @@ header p {
 .type-victory  { background: rgba(45, 110, 58, 0.3);   color: #6ecf82; }
 .type-reaction { background: rgba(90, 58, 138, 0.3);   color: #b08ae0; }
 .type-treasure { background: rgba(200, 160, 20, 0.25); color: #e0c050; }
+.type-duration { background: rgba(200, 100, 20, 0.25); color: #e09050; }
 .type-curse    { background: rgba(80, 40, 80, 0.35);   color: #c080c0; }
 
 .card-footer {

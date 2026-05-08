@@ -239,6 +239,7 @@ function renderKingdom(players) {
     const typeClass = card.types.includes('Attack') ? 'type-attack'
       : card.types.includes('Reaction') ? 'type-reaction'
       : card.types.includes('Victory') ? 'type-victory'
+      : card.types.includes('Duration') ? 'type-duration'
       : card.types.includes('Treasure') ? 'type-treasure'
       : 'type-action';
 
