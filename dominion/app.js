@@ -268,12 +268,6 @@ function renderKingdom(players) {
   kingdom.forEach(card => {
     const count = getCardCount(card, players);
     const setInfo = allSets.find(s => s.id === card.set);
-    const typeClass = card.types.includes('Attack') ? 'type-attack'
-      : card.types.includes('Reaction') ? 'type-reaction'
-      : card.types.includes('Victory') ? 'type-victory'
-      : card.types.includes('Duration') ? 'type-duration'
-      : card.types.includes('Treasure') ? 'type-treasure'
-      : 'type-action';
 
     const isSelected = pendingVetoCard === card.name;
     const tile = document.createElement('div');
@@ -297,13 +291,7 @@ function renderKingdom(players) {
         ${vetoHtml}
       </div>
       <div class="card-info">
-        <div class="card-name-row">
-          <span class="card-name">${card.name}</span>
-          <span class="card-cost">💰 ${card.cost}</span>
-        </div>
-        <div class="card-meta">
-          <span class="card-type ${typeClass}">${card.types.join(' · ')}</span>
-        </div>
+        <div class="card-name">${card.name}</div>
         <div class="card-footer">
           <span class="card-set">${setInfo ? setInfo.name : card.set}</span>
           <span class="card-count">×${count}</span>
@@ -353,9 +341,6 @@ function renderBasicSupply(players) {
   BASIC_SUPPLY.forEach(card => {
     if (prosperityNames.has(card.name) && !usePlatinumColony) return;
     const count = card.getCount(players);
-    const typeClass = card.types[0] === 'Treasure' ? 'type-treasure'
-      : card.types[0] === 'Victory' ? 'type-victory'
-      : 'type-curse';
     const tile = document.createElement('div');
     tile.className = 'card-tile';
     tile.innerHTML = `
@@ -364,13 +349,7 @@ function renderBasicSupply(players) {
           onerror="this.closest('.card-image-wrap').classList.add('img-error'); this.remove();">
       </div>
       <div class="card-info">
-        <div class="card-name-row">
-          <span class="card-name">${card.name}</span>
-          <span class="card-cost">💰 ${card.cost}</span>
-        </div>
-        <div class="card-meta">
-          <span class="card-type ${typeClass}">${card.types[0]}</span>
-        </div>
+        <div class="card-name">${card.name}</div>
         <div class="card-footer">
           <span class="card-set">Base Set (2nd Ed.)</span>
           <span class="card-count">×${count}</span>
