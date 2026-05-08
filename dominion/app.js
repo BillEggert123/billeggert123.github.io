@@ -265,9 +265,11 @@ function renderKingdom(players) {
         ${vetoHtml}
       </div>
       <div class="card-info">
-        <div class="card-name">${card.name}</div>
-        <div class="card-meta">
+        <div class="card-name-row">
+          <span class="card-name">${card.name}</span>
           <span class="card-cost">💰 ${card.cost}</span>
+        </div>
+        <div class="card-meta">
           <span class="card-type ${typeClass}">${card.types.join(' · ')}</span>
         </div>
         <div class="card-footer">
@@ -326,9 +328,11 @@ function renderBasicSupply(players) {
           onerror="this.closest('.card-image-wrap').classList.add('img-error'); this.remove();">
       </div>
       <div class="card-info">
-        <div class="card-name">${card.name}</div>
-        <div class="card-meta">
+        <div class="card-name-row">
+          <span class="card-name">${card.name}</span>
           <span class="card-cost">💰 ${card.cost}</span>
+        </div>
+        <div class="card-meta">
           <span class="card-type ${typeClass}">${card.types[0]}</span>
         </div>
         <div class="card-footer">

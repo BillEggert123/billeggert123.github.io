@@ -258,6 +258,13 @@ header p {
   gap: 0.35rem;
 }
 
+.card-name-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.4rem;
+}
+
 .card-name {
   font-size: 0.95rem;
   font-weight: 700;
@@ -265,17 +272,15 @@ header p {
   line-height: 1.2;
 }
 
-.card-meta {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
-  flex-wrap: nowrap;
-  overflow: hidden;
-}
-
 .card-cost {
   font-size: 0.78rem;
   color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.card-meta {
+  display: flex;
+  align-items: center;
 }
 
 .card-type {
