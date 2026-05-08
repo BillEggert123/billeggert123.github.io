@@ -229,30 +229,14 @@ function resetVeto() {
   usePlatinumColony = false;
   prosperityPickedCard = null;
   document.getElementById('first-player-banner').hidden = true;
-  document.getElementById('prosperity-note').hidden = true;
 }
 
 // ─── Prosperity rule ──────────────────────────────────────────────────────────
 
 function checkProsperityRule() {
-  if (kingdom.length === 0) { usePlatinumColony = false; prosperityPickedCard = null; return; }
+  if (kingdom.length === 0) { usePlatinumColony = false; return; }
   const picked = kingdom[Math.floor(Math.random() * kingdom.length)];
-  prosperityPickedCard = picked.name;
   usePlatinumColony = picked.set === 'prosperity2';
-  renderProsperityNote();
-}
-
-function renderProsperityNote() {
-  const note = document.getElementById('prosperity-note');
-  if (!prosperityPickedCard) { note.hidden = true; return; }
-  note.hidden = false;
-  if (usePlatinumColony) {
-    note.className = 'prosperity-note prosperity-active';
-    note.textContent = `Prosperity! (picked: ${prosperityPickedCard}) — Platinum & Colony added`;
-  } else {
-    note.className = 'prosperity-note';
-    note.textContent = `No Prosperity (picked: ${prosperityPickedCard})`;
-  }
 }
 
 // ─── Render kingdom ───────────────────────────────────────────────────────────
