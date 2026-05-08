@@ -162,12 +162,13 @@ function startVeto() {
   const cards = buildCardPool(10 + vetoCount);
   if (!cards) return;
 
-  // Build veto order: each player appears vetoCount/players times, then shuffle
+  // Build veto order: randomise player order once, then repeat that order each round
   const names = getPlayerNames(players);
   const vetosEach = vetoCount / players;
+  const order = shuffle([...names]);
   const queue = [];
-  for (let i = 0; i < vetosEach; i++) names.forEach(n => queue.push(n));
-  vetoQueue = shuffle(queue);
+  for (let i = 0; i < vetosEach; i++) order.forEach(n => queue.push(n));
+  vetoQueue = queue;
   vetoIndex = 0;
   vetoMode = true;
   pendingVetoCard = null;
@@ -298,13 +299,13 @@ function toggleSort() {
 // ─── Basic supply ─────────────────────────────────────────────────────────────
 
 const BASIC_SUPPLY = [
-  { name: 'Copper',   image: 'images/Copper.jpg',   types: ['Treasure'], getCount: p => 60 - 7 * p },
-  { name: 'Silver',   image: 'images/Silver.jpg',   types: ['Treasure'], getCount: _p => 40 },
-  { name: 'Gold',     image: 'images/Gold.jpg',     types: ['Treasure'], getCount: _p => 30 },
-  { name: 'Estate',   image: 'images/Estate.jpg',   types: ['Victory'],  getCount: p => p === 2 ? 8 : 12 },
-  { name: 'Duchy',    image: 'images/Duchy.jpg',    types: ['Victory'],  getCount: p => p === 2 ? 8 : 12 },
-  { name: 'Province', image: 'images/Province.jpg', types: ['Victory'],  getCount: p => p === 2 ? 8 : 12 },
-  { name: 'Curse',    image: 'images/Curse.jpg',    types: ['Curse'],    getCount: p => 10 * (p - 1) },
+  { name: 'Copper',   image: 'images/Copper.jpg',   types: ['Treasure'], cost: 0, getCount: p => 60 - 7 * p },
+  { name: 'Silver',   image: 'images/Silver.jpg',   types: ['Treasure'], cost: 3, getCount: _p => 40 },
+  { name: 'Gold',     image: 'images/Gold.jpg',     types: ['Treasure'], cost: 6, getCount: _p => 30 },
+  { name: 'Estate',   image: 'images/Estate.jpg',   types: ['Victory'],  cost: 2, getCount: p => p === 2 ? 8 : 12 },
+  { name: 'Duchy',    image: 'images/Duchy.jpg',    types: ['Victory'],  cost: 5, getCount: p => p === 2 ? 8 : 12 },
+  { name: 'Province', image: 'images/Province.jpg', types: ['Victory'],  cost: 8, getCount: p => p === 2 ? 8 : 12 },
+  { name: 'Curse',    image: 'images/Curse.jpg',    types: ['Curse'],    cost: 0, getCount: p => 10 * (p - 1) },
 ];
 
 function renderBasicSupply(players) {
@@ -325,10 +326,11 @@ function renderBasicSupply(players) {
       <div class="card-info">
         <div class="card-name">${card.name}</div>
         <div class="card-meta">
+          <span class="card-cost">💰 ${card.cost}</span>
           <span class="card-type ${typeClass}">${card.types[0]}</span>
         </div>
         <div class="card-footer">
-          <span class="card-set">Base</span>
+          <span class="card-set">Base Set (2nd Ed.)</span>
           <span class="card-count">×${count}</span>
         </div>
       </div>
