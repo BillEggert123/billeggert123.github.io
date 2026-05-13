@@ -147,6 +147,7 @@ header p {
   transition: border-color 0.15s, color 0.15s;
 }
 .sort-btn:hover { border-color: var(--accent); color: var(--accent); }
+.sort-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,146,42,0.1); }
 
 .generate-btn {
   width: 100%;

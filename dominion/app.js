@@ -2,6 +2,14 @@ let allCards = [];
 let allSets = [];
 let kingdom = [];
 let sortOrder = 'cost'; // 'cost' | 'set'
+let requireVillage = false;
+
+const VILLAGE_CARDS = new Set([
+  'Village', 'Festival',                   // Base 2nd Ed
+  'Shanty Town', 'Mining Village',          // Intrigue 2nd Ed
+  'Native Village', 'Fishing Village', 'Bazaar', // Seaside 2nd Ed
+  "Worker's Village", 'City',              // Prosperity 2nd Ed
+]);
 
 // Veto state
 let vetoMode = false;
@@ -53,6 +61,7 @@ function setupControls() {
   document.getElementById('generate-btn').addEventListener('click', generateKingdom);
   document.getElementById('veto-btn').addEventListener('click', startVeto);
   document.getElementById('sort-btn').addEventListener('click', toggleSort);
+  document.getElementById('village-btn').addEventListener('click', toggleVillage);
 
   // Event delegation for veto card interactions
   document.getElementById('kingdom-grid').addEventListener('click', e => {
@@ -136,11 +145,30 @@ function buildCardPool(totalCount) {
   return picked.slice(0, totalCount);
 }
 
+// ─── Village requirement ──────────────────────────────────────────────────────
+
+function toggleVillage() {
+  requireVillage = !requireVillage;
+  const btn = document.getElementById('village-btn');
+  btn.classList.toggle('active', requireVillage);
+  btn.textContent = requireVillage ? 'Village: On' : 'Village: Off';
+}
+
+function drawWithConstraints(count) {
+  for (let i = 0; i < 200; i++) {
+    const cards = buildCardPool(count);
+    if (!cards) return null;
+    if (!requireVillage || cards.some(c => VILLAGE_CARDS.has(c.name))) return cards;
+  }
+  showError('No +2 Actions card available with the selected sets and constraints.');
+  return null;
+}
+
 // ─── Generate ────────────────────────────────────────────────────────────────
 
 function generateKingdom() {
   resetVeto();
-  const cards = buildCardPool(10);
+  const cards = drawWithConstraints(10);
   if (!cards) return;
 
   kingdom = cards;
@@ -163,7 +191,7 @@ function startVeto() {
 
   if (vetoCount === 0) { generateKingdom(); return; }
 
-  const cards = buildCardPool(10 + vetoCount);
+  const cards = drawWithConstraints(10 + vetoCount);
   if (!cards) return;
 
   // Build veto order: randomise player order once, then repeat that order each round
