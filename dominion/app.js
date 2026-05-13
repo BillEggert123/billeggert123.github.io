@@ -3,12 +3,20 @@ let allSets = [];
 let kingdom = [];
 let sortOrder = 'cost'; // 'cost' | 'set'
 let requireVillage = false;
+let requireTrash = false;
 
 const VILLAGE_CARDS = new Set([
-  'Village', 'Festival',                   // Base 2nd Ed
-  'Shanty Town', 'Mining Village',          // Intrigue 2nd Ed
+  'Village', 'Festival',                        // Base 2nd Ed
+  'Shanty Town', 'Mining Village',               // Intrigue 2nd Ed
   'Native Village', 'Fishing Village', 'Bazaar', // Seaside 2nd Ed
-  "Worker's Village", 'City',              // Prosperity 2nd Ed
+  "Worker's Village", 'City',                   // Prosperity 2nd Ed
+]);
+
+const TRASH_CARDS = new Set([
+  'Chapel', 'Mine', 'Remodel', 'Moneylender', 'Sentry',  // Base 2nd Ed
+  'Masquerade', 'Trading Post', 'Upgrade', 'Replace',     // Intrigue 2nd Ed
+  'Lookout', 'Salvager', 'Sailor',                        // Seaside 2nd Ed
+  'Bishop', 'Expand', 'Forge', 'Investment',              // Prosperity 2nd Ed
 ]);
 
 // Veto state
@@ -62,6 +70,7 @@ function setupControls() {
   document.getElementById('veto-btn').addEventListener('click', startVeto);
   document.getElementById('sort-btn').addEventListener('click', toggleSort);
   document.getElementById('village-check').addEventListener('change', e => { requireVillage = e.target.checked; });
+  document.getElementById('trash-check').addEventListener('change', e => { requireTrash = e.target.checked; });
 
   // Event delegation for veto card interactions
   document.getElementById('kingdom-grid').addEventListener('click', e => {
@@ -152,9 +161,11 @@ function drawWithConstraints(count) {
   for (let i = 0; i < 200; i++) {
     const cards = buildCardPool(count);
     if (!cards) return null;
-    if (!requireVillage || cards.some(c => VILLAGE_CARDS.has(c.name))) return cards;
+    const hasVillage = !requireVillage || cards.some(c => VILLAGE_CARDS.has(c.name));
+    const hasTrash   = !requireTrash   || cards.some(c => TRASH_CARDS.has(c.name));
+    if (hasVillage && hasTrash) return cards;
   }
-  showError('No +2 Actions card available with the selected sets and constraints.');
+  showError('Could not satisfy all requirements with the selected sets and constraints.');
   return null;
 }
 
