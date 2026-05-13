@@ -61,7 +61,7 @@ function setupControls() {
   document.getElementById('generate-btn').addEventListener('click', generateKingdom);
   document.getElementById('veto-btn').addEventListener('click', startVeto);
   document.getElementById('sort-btn').addEventListener('click', toggleSort);
-  document.getElementById('village-btn').addEventListener('click', toggleVillage);
+  document.getElementById('village-check').addEventListener('change', e => { requireVillage = e.target.checked; });
 
   // Event delegation for veto card interactions
   document.getElementById('kingdom-grid').addEventListener('click', e => {
@@ -147,12 +147,6 @@ function buildCardPool(totalCount) {
 
 // ─── Village requirement ──────────────────────────────────────────────────────
 
-function toggleVillage() {
-  requireVillage = !requireVillage;
-  const btn = document.getElementById('village-btn');
-  btn.classList.toggle('active', requireVillage);
-  btn.textContent = requireVillage ? 'Village: On' : 'Village: Off';
-}
 
 function drawWithConstraints(count) {
   for (let i = 0; i < 200; i++) {
