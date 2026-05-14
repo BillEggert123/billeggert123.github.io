@@ -10,6 +10,7 @@ const VILLAGE_CARDS = new Set([
   'Shanty Town', 'Mining Village',               // Intrigue 2nd Ed
   'Native Village', 'Fishing Village', 'Bazaar', // Seaside 2nd Ed
   "Worker's Village", 'City',                   // Prosperity 2nd Ed
+  'University',                                 // Alchemy
 ]);
 
 const TRASH_CARDS = new Set([
@@ -17,6 +18,7 @@ const TRASH_CARDS = new Set([
   'Masquerade', 'Trading Post', 'Upgrade', 'Replace',     // Intrigue 2nd Ed
   'Lookout', 'Salvager', 'Sailor',                        // Seaside 2nd Ed
   'Bishop', 'Expand', 'Forge', 'Investment',              // Prosperity 2nd Ed
+  'Apprentice', 'Transmute',                              // Alchemy
 ]);
 
 // Veto state
