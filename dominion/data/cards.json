@@ -19,6 +19,11 @@
       "id": "prosperity2",
       "name": "Prosperity (2nd Ed.)",
       "year": 2022
+    },
+    {
+      "id": "alchemy",
+      "name": "Alchemy",
+      "year": 2010
     }
   ],
   "cards": [
@@ -128,6 +133,19 @@
     { "name": "Expand",         "set": "prosperity2", "cost": 7, "types": ["Action"],              "isVictory": false, "image": "images/Expand.jpg" },
     { "name": "Forge",          "set": "prosperity2", "cost": 7, "types": ["Action"],              "isVictory": false, "image": "images/Forge.jpg" },
     { "name": "King's Court",   "set": "prosperity2", "cost": 7, "types": ["Action"],              "isVictory": false, "image": "images/King's_Court.jpg" },
-    { "name": "Peddler",        "set": "prosperity2", "cost": 8, "types": ["Action"],              "isVictory": false, "image": "images/Peddler.jpg" }
+    { "name": "Peddler",        "set": "prosperity2", "cost": 8, "types": ["Action"],              "isVictory": false, "image": "images/Peddler.jpg" },
+
+    { "name": "Herbalist",          "set": "alchemy", "cost": 2,                  "types": ["Action"],            "isVictory": false, "image": "images/Herbalist.jpg" },
+    { "name": "Apprentice",         "set": "alchemy", "cost": 5,                  "types": ["Action"],            "isVictory": false, "image": "images/Apprentice.jpg" },
+    { "name": "Transmute",          "set": "alchemy", "cost": 0, "potion": true,  "types": ["Action"],            "isVictory": false, "image": "images/Transmute.jpg" },
+    { "name": "Vineyard",           "set": "alchemy", "cost": 0, "potion": true,  "types": ["Victory"],           "isVictory": true,  "image": "images/Vineyard.jpg" },
+    { "name": "Apothecary",         "set": "alchemy", "cost": 2, "potion": true,  "types": ["Action"],            "isVictory": false, "image": "images/Apothecary.jpg" },
+    { "name": "Scrying Pool",       "set": "alchemy", "cost": 2, "potion": true,  "types": ["Action","Attack"],   "isVictory": false, "image": "images/Scrying_Pool.jpg" },
+    { "name": "University",         "set": "alchemy", "cost": 3, "potion": true,  "types": ["Action"],            "isVictory": false, "image": "images/University.jpg" },
+    { "name": "Alchemist",          "set": "alchemy", "cost": 3, "potion": true,  "types": ["Action"],            "isVictory": false, "image": "images/Alchemist.jpg" },
+    { "name": "Familiar",           "set": "alchemy", "cost": 3, "potion": true,  "types": ["Action","Attack"],   "isVictory": false, "image": "images/Familiar.jpg" },
+    { "name": "Philosopher's Stone","set": "alchemy", "cost": 3, "potion": true,  "types": ["Treasure"],          "isVictory": false, "image": "images/Philosopher's_Stone.jpg" },
+    { "name": "Golem",              "set": "alchemy", "cost": 4, "potion": true,  "types": ["Action"],            "isVictory": false, "image": "images/Golem.jpg" },
+    { "name": "Possession",         "set": "alchemy", "cost": 6, "potion": true,  "types": ["Action"],            "isVictory": false, "image": "images/Possession.jpg" }
   ]
 }

@@ -29,6 +29,9 @@ let pendingVetoCard = null; // card name currently selected for veto
 let usePlatinumColony = false;
 let prosperityPickedCard = null;
 
+// Alchemy state
+let usePotion = false;
+
 // ─── Init ────────────────────────────────────────────────────────────────────
 
 async function init() {
@@ -179,6 +182,7 @@ function generateKingdom() {
   kingdom = cards;
   const players = parseInt(document.getElementById('players').value) || 2;
   checkProsperityRule();
+  checkAlchemyRule();
   renderBasicSupply(players);
   showFirstPlayer(pickFirstPlayer(getPlayerNames(players), players));
   sortKingdom();
@@ -261,7 +265,14 @@ function resetVeto() {
   pendingVetoCard = null;
   usePlatinumColony = false;
   prosperityPickedCard = null;
+  usePotion = false;
   document.getElementById('first-player-banner').hidden = true;
+}
+
+// ─── Alchemy rule ────────────────────────────────────────────────────────────
+
+function checkAlchemyRule() {
+  usePotion = kingdom.some(c => c.potion);
 }
 
 // ─── Prosperity rule ──────────────────────────────────────────────────────────
@@ -340,23 +351,24 @@ function toggleSort() {
 // ─── Basic supply ─────────────────────────────────────────────────────────────
 
 const BASIC_SUPPLY = [
-  { name: 'Copper',   image: 'images/Copper.jpg',   types: ['Treasure'], cost: 0, getCount: p => 60 - 7 * p },
-  { name: 'Silver',   image: 'images/Silver.jpg',   types: ['Treasure'], cost: 3, getCount: _p => 40 },
-  { name: 'Gold',     image: 'images/Gold.jpg',     types: ['Treasure'], cost: 6, getCount: _p => 30 },
-  { name: 'Platinum', image: 'images/Platinum.jpg', types: ['Treasure'], cost: 9, getCount: _p => 12 },
-  { name: 'Estate',   image: 'images/Estate.jpg',   types: ['Victory'],  cost: 2, getCount: p => p === 2 ? 8 : 12 },
-  { name: 'Duchy',    image: 'images/Duchy.jpg',    types: ['Victory'],  cost: 5, getCount: p => p === 2 ? 8 : 12 },
-  { name: 'Province', image: 'images/Province.jpg', types: ['Victory'],  cost: 8, getCount: p => p === 2 ? 8 : 12 },
-  { name: 'Colony',   image: 'images/Colony.jpg',   types: ['Victory'],  cost: 11, getCount: p => p === 2 ? 8 : 12 },
-  { name: 'Curse',    image: 'images/Curse.jpg',    types: ['Curse'],    cost: 0, getCount: p => 10 * (p - 1) },
+  { name: 'Copper',   image: 'images/Copper.jpg',   types: ['Treasure'], cost: 0,  getCount: p => 60 - 7 * p,            conditional: null },
+  { name: 'Silver',   image: 'images/Silver.jpg',   types: ['Treasure'], cost: 3,  getCount: _p => 40,                   conditional: null },
+  { name: 'Gold',     image: 'images/Gold.jpg',     types: ['Treasure'], cost: 6,  getCount: _p => 30,                   conditional: null },
+  { name: 'Platinum', image: 'images/Platinum.jpg', types: ['Treasure'], cost: 9,  getCount: _p => 12,                   conditional: 'prosperity' },
+  { name: 'Potion',   image: 'images/Potion.jpg',   types: ['Treasure'], cost: 4,  getCount: _p => 16,                   conditional: 'alchemy' },
+  { name: 'Estate',   image: 'images/Estate.jpg',   types: ['Victory'],  cost: 2,  getCount: p => p === 2 ? 8 : 12,      conditional: null },
+  { name: 'Duchy',    image: 'images/Duchy.jpg',    types: ['Victory'],  cost: 5,  getCount: p => p === 2 ? 8 : 12,      conditional: null },
+  { name: 'Province', image: 'images/Province.jpg', types: ['Victory'],  cost: 8,  getCount: p => p === 2 ? 8 : 12,      conditional: null },
+  { name: 'Colony',   image: 'images/Colony.jpg',   types: ['Victory'],  cost: 11, getCount: p => p === 2 ? 8 : 12,      conditional: 'prosperity' },
+  { name: 'Curse',    image: 'images/Curse.jpg',    types: ['Curse'],    cost: 0,  getCount: p => 10 * (p - 1),          conditional: null },
 ];
 
 function renderBasicSupply(players) {
   const grid = document.getElementById('supply-grid');
   grid.innerHTML = '';
-  const prosperityNames = new Set(['Platinum', 'Colony']);
   BASIC_SUPPLY.forEach(card => {
-    if (prosperityNames.has(card.name) && !usePlatinumColony) return;
+    if (card.conditional === 'prosperity' && !usePlatinumColony) return;
+    if (card.conditional === 'alchemy'    && !usePotion)          return;
     const count = card.getCount(players);
     const tile = document.createElement('div');
     tile.className = 'card-tile';
