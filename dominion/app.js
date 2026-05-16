@@ -45,8 +45,7 @@ async function init() {
   renderSetCheckboxes();
   setupControls();
   renderPlayerInputs(2);
-  generateKingdom();
-  renderBasicSupply(2);
+  renderKingdom(2);
 }
 
 // ─── Controls ────────────────────────────────────────────────────────────────
@@ -59,7 +58,7 @@ function renderSetCheckboxes() {
     label.className = 'set-checkbox';
     label.innerHTML = `
       <input type="checkbox" value="${set.id}" checked>
-      <span>${set.name}</span>
+      <span>${set.name}${set.id === 'alchemy' ? ' (half weight set selection)' : ''}</span>
     `;
     container.appendChild(label);
   });
@@ -73,6 +72,7 @@ function setupControls() {
   document.getElementById('veto-count').addEventListener('input', validateVetoCount);
   document.getElementById('generate-btn').addEventListener('click', generateKingdom);
   document.getElementById('veto-btn').addEventListener('click', startVeto);
+  document.getElementById('start-game-btn').addEventListener('click', onStartGame);
   document.getElementById('sort-btn').addEventListener('click', toggleSort);
   document.getElementById('village-check').addEventListener('change', e => { requireVillage = e.target.checked; });
   document.getElementById('trash-check').addEventListener('change', e => { requireTrash = e.target.checked; });
@@ -134,14 +134,14 @@ function buildCardPool(totalCount) {
     parseInt(document.getElementById('max-sets').value) || selectedSetIds.length,
     selectedSetIds.length
   );
-  const minPerSet = parseInt(document.getElementById('min-per-set').value) || 1;
+  const minPerSet = parseInt(document.getElementById('min-per-set').value) ?? 1;
 
   if (maxSets * minPerSet > totalCount) {
     showError(`Constraints require ${maxSets * minPerSet} cards but only ${totalCount} slots available.`);
     return null;
   }
 
-  const shuffledSets = shuffle([...selectedSetIds]).slice(0, maxSets);
+  const shuffledSets = weightedSampleSets(selectedSetIds, maxSets);
   const poolBySet = {};
   shuffledSets.forEach(id => { poolBySet[id] = shuffle(allCards.filter(c => c.set === id)); });
 
@@ -186,9 +186,10 @@ function generateKingdom() {
   checkProsperityRule();
   checkAlchemyRule();
   renderBasicSupply(players);
-  showFirstPlayer(pickFirstPlayer(getPlayerNames(players), players));
   sortKingdom();
   renderKingdom(players);
+  document.getElementById('first-player-banner').hidden = true;
+  document.getElementById('start-game-btn').hidden = false;
   hideError();
 }
 
@@ -201,6 +202,7 @@ function startVeto() {
   const vetoCount = parseInt(document.getElementById('veto-count').value) || 0;
 
   if (vetoCount === 0) { generateKingdom(); return; }
+  document.getElementById('start-game-btn').hidden = true;
 
   const cards = drawWithConstraints(10 + vetoCount);
   if (!cards) return;
@@ -219,7 +221,7 @@ function startVeto() {
   kingdom = cards;
   sortKingdom();
 
-  renderBasicSupply(players);
+  document.getElementById('supply-grid').innerHTML = '';
   updateVetoBanner();
   renderKingdom(players);
   hideError();
@@ -247,11 +249,18 @@ function confirmVeto() {
     sortKingdom();
     checkProsperityRule();
     renderBasicSupply(players);
-    showFirstPlayer(pickFirstPlayer(getPlayerNames(players), players));
+    document.getElementById('first-player-banner').hidden = true;
+    document.getElementById('start-game-btn').hidden = false;
   } else {
     updateVetoBanner();
   }
   renderKingdom(players);
+}
+
+function onStartGame() {
+  const players = parseInt(document.getElementById('players').value) || 2;
+  showFirstPlayer(pickFirstPlayer(getPlayerNames(players), players));
+  document.getElementById('start-game-btn').hidden = true;
 }
 
 function updateVetoBanner() {
@@ -269,6 +278,7 @@ function resetVeto() {
   prosperityPickedCard = null;
   usePotion = false;
   document.getElementById('first-player-banner').hidden = true;
+  document.getElementById('start-game-btn').hidden = true;
 }
 
 // ─── Alchemy rule ────────────────────────────────────────────────────────────
@@ -434,6 +444,18 @@ function getCardCount(card, players) {
 }
 
 function cardImageUrl(card) { return card.image || ''; }
+
+function weightedSampleSets(setIds, count) {
+  const pool = setIds.map(id => ({ id, weight: id === 'alchemy' ? 0.5 : 1.0 })); // alchemy gets half weight in set selection
+  const result = [];
+  while (result.length < count && pool.length > 0) {
+    const total = pool.reduce((sum, s) => sum + s.weight, 0);
+    let r = Math.random() * total;
+    const idx = pool.findIndex(s => (r -= s.weight) < 0);
+    result.push(pool.splice(idx === -1 ? pool.length - 1 : idx, 1)[0].id);
+  }
+  return result;
+}
 
 function shuffle(arr) {
   for (let i = arr.length - 1; i > 0; i--) {

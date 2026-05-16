@@ -138,16 +138,16 @@ header p {
 .sort-btn {
   width: 100%;
   padding: 0.6rem;
-  background: transparent;
-  color: var(--text-muted);
-  border: 1px solid var(--panel-border);
+  background: #4a6fa5;
+  color: #ffffff;
+  border: none;
   border-radius: var(--radius);
   font-size: 0.85rem;
+  font-weight: 700;
   cursor: pointer;
-  transition: border-color 0.15s, color 0.15s;
+  transition: background 0.15s;
 }
-.sort-btn:hover { border-color: var(--accent); color: var(--accent); }
-.sort-btn.active { border-color: var(--accent); color: var(--accent); background: rgba(200,146,42,0.1); }
+.sort-btn:hover { background: #5a82be; }
 
 .generate-btn {
   width: 100%;
@@ -328,6 +328,12 @@ header p {
   margin-top: -0.25rem;
 }
 .veto-start-btn:hover { background: #7a3a3a; }
+
+.start-game-btn {
+  background: #2a5a2a;
+  color: #80e0a0;
+}
+.start-game-btn:hover { background: #3a7a3a; }
 
 /* Veto card states */
 .card-tile.veto-active { cursor: default; }
